@@ -8,6 +8,7 @@ line()
 produto = Produto()
 
 while True:
+    line()
     opcao = number("Digite sua opção:\n> ")
     line()
 

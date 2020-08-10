@@ -39,7 +39,7 @@ Frete: {vF1.replace('.', ',')}""")
 
         line()
 
-        print(f"O valor recomendado para a venda do produto é: R$ {vProduto}")
+        print(f"O valor recomendado para a venda do produto é: R$ {round(vProduto, 2):.2f}")
 
     elif opcao == 9:
         options.show()

@@ -1,13 +1,13 @@
-from functions import showMenu, line, Produto, header, number
+from functions import showMenu, line, Produto, header, number, Options
 
 header("PRECIFICAÇÃO")
 
-showMenu()
-line()
-
 produto = Produto()
+options = Options()
 
 while True:
+    showMenu()
+    line()
     opcao = number("Digite sua opção:\n> ")
     line()
 
@@ -22,6 +22,7 @@ while True:
 
         if type(vFrete) == float:
             print(f"O valor do frete ficou: R$ {str(vFrete).replace('.', ',')}")
+
         else:
             vF0 = f"{vFrete[0]:.2f}"
             vF1 = f"{vFrete[1]:.2f}"
@@ -39,6 +40,20 @@ Frete: {vF1.replace('.', ',')}""")
     elif opcao == 2:
         vProduto = produto.calcPreco()
         print(vProduto)
+
+    elif opcao == 9:
+        options.show()
+
+        print("[A] Ativar ou Desativar\n[M] Mudar os Valores")
+
+        opcao2 = input("> ").upper()
+
+        if opcao2 == "A":
+            options.showAtivo()
+            print("WIP")
+        
+        elif opcao2 == "M":
+            options.change()
 
     else:
         print("Opção invalida.\n")

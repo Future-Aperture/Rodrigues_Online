@@ -34,12 +34,12 @@ Frete: {vF1.replace('.', ',')}""")
        
         line()
 
-        showMenu()
-        line()
-    
     elif opcao == 2:
         vProduto = produto.calcPreco()
-        print(vProduto)
+
+        line()
+
+        print(f"O valor recomendado para a venda do produto é: R$ {vProduto}")
 
     elif opcao == 9:
         options.show()

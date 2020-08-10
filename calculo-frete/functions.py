@@ -165,6 +165,9 @@ Taxa ML = [X]\n""")
 
 class Produto:
 
+    def __init__(self, op):
+        self.opcao = op
+
     frete = 0
     preco = 0
 
@@ -218,10 +221,10 @@ class Produto:
                 resp = input("Deseja usar o valor do ultimo frete calculado? [S/N]\n> ").upper()
 
                 if resp == "N":
-                    frete = self.calcFrete(twoValues = False)
+                    self.frete = self.calcFrete(twoValues = False)
                 
                 elif resp == "S":
-                    if len(self.frete) == 2:
+                    if type(self.frete) == list:
                         if self.preco < 120:
                             self.frete = self.frete[0]
 
@@ -239,12 +242,14 @@ class Produto:
             frete = self.calcFrete(twoValues = False)
             self.frete = frete
 
-        vImposto = (self.preco + self.frete) * Options.imposto
-        vTaxaML = (self.preco + self.frete) * Options.taxaML
+        vImposto = (self.preco + self.frete) * self.opcao.imposto
+        vTaxaML = (self.preco + self.frete) * self.opcao.taxaML
 
-        precoFinal = self.frete + self.preco + Options.embalagem + vImposto + vTaxaML
+        precoFinal = self.frete + self.preco + self.opcao.embalagem + vImposto + vTaxaML
 
         if self.preco < 120:
-            precoFinal += 5
+            precoFinal += self.opcao.adicionalML
+
+        precoFinal += precoFinal * self.opcao.lucro
 
         return precoFinal

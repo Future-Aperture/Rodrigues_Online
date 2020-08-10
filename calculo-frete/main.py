@@ -2,8 +2,8 @@ from functions import showMenu, line, Produto, header, number, Options
 
 header("PRECIFICAÇÃO")
 
-produto = Produto()
 options = Options()
+produto = Produto(options)
 
 while True:
     showMenu()
@@ -40,6 +40,7 @@ Frete: {vF1.replace('.', ',')}""")
         line()
 
         print(f"O valor recomendado para a venda do produto é: R$ {round(vProduto, 2):.2f}")
+        line()
 
     elif opcao == 9:
         options.show()

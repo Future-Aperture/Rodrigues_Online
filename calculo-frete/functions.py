@@ -209,10 +209,13 @@ class Produto:
             else:
                 if twoValues:
                     return frete
+                    
                 else:
                     print("\nNão podemos calcular o preco com dois valores de frete, por favor, insira um preço.")
+
                     preco = number("\nPreço: R$ ")
                     self.preco = preco
+
                     continue
 
     def calcPreco(self):

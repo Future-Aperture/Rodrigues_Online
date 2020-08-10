@@ -20,8 +20,10 @@ while True:
         vFrete = produto.calcFrete()
         line()
 
+        vFrete = f"{vFrete:.2f}"
+
         if type(vFrete) == float:
-            print(f"O valor do frete ficou: R$ {str(vFrete).replace('.', ',')}")
+            print(f"O valor do frete ficou: R$ {vFrete.replace('.', ',')}")
 
         else:
             vF0 = f"{vFrete[0]:.2f}"
@@ -58,5 +60,3 @@ Frete: {vF1.replace('.', ',')}""")
 
     else:
         print("Opção invalida.\n")
-
-

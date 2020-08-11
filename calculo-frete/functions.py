@@ -1,3 +1,7 @@
+from decimal import Decimal, getcontext
+
+getcontext().prec = 10
+
 def line():
     print()
     print("-=" * 30)
@@ -99,11 +103,14 @@ class Options:
     imposto = 15 / 100
     lucro = 20 / 100
 
+    multInicial = 1.5
+
     def show(self):
         print(f"""- Todos -
+Multiplicador Inicial
 Embalagem
 Imposto
-Lucro
+Lucro Mínimo
 
 - Mercado Livre -
 Adicional ML [Apenas caso o produto custe menos do que R$ 120,00]
@@ -111,9 +118,10 @@ Taxa ML\n""")
 
     def showAtivo(self):
         print(f"""- Todos -
+Multiplicador Inicial [X] [Não pode ser desativado]
 Embalagem = [X]
 Imposto = [X]
-Lucro = [X]
+Lucro Mínimo = [X]
 
 - Mercado Livre -
 Adicional ML = [X]
@@ -124,13 +132,14 @@ Taxa ML = [X]\n""")
         aML = f"{self.adicionalML:.2f}"
 
         print(f"""- Todos -
-[1]Embalagem = R$ {emb.replace(".", ",")}
-[2]Imposto = {str(self.imposto * 100).replace(".", ",")}%
-[3]Lucro = {str(self.lucro * 100).replace(".", ",")}%
+[1]Multiplicador Inicial = {str(self.multInicial).replace(".", ",")}x
+[2]Embalagem = R$ {emb.replace(".", ",")}
+[3]Imposto = {str(self.imposto * 100).replace(".", ",")}%
+[4]Lucro Mínimo = {str(self.lucro * 100).replace(".", ",")}%
 
 - Mercado Livre -
-[4]Adicional ML = {aML.replace(".", ",")}
-[5]Taxa ML = {str(self.taxaML * 100).replace(".", ",")}%\n""")
+[5]Adicional ML = R$ {aML.replace(".", ",")}
+[6]Taxa ML = {str(self.taxaML * 100).replace(".", ",")}%\n""")
 
 
     def change(self):
@@ -144,18 +153,21 @@ Taxa ML = [X]\n""")
                 break
 
             elif escolha == 1:
+                self.multInicial = number("\nValor inicial do multiplicador\n> ")
+
+            elif escolha == 2:
                 self.embalagem = number("\nCusto da embalagem\n> R$ ")
             
-            elif escolha == 2:
+            elif escolha == 3:
                 self.imposto = number("\nPorcentagem de imposto\n> ") / 100
 
-            elif escolha == 3:
+            elif escolha == 4:
                 self.lucro = number("\nPorcentagem de lucro\n> ") / 100
 
-            elif escolha == 4:
+            elif escolha == 5:
                 self.adicionalML = number("\nCusto adicional do ML\n> ")
 
-            elif escolha == 5:
+            elif escolha == 6:
                 self.taxaML = number("\nPorcentagem da taxa adicional do ML\n> ") / 100
 
             else:
@@ -209,7 +221,7 @@ class Produto:
             else:
                 if twoValues:
                     return frete
-                    
+
                 else:
                     print("\nNão podemos calcular o preco com dois valores de frete, por favor, insira um preço.")
 
@@ -219,6 +231,9 @@ class Produto:
                     continue
 
     def calcPreco(self):
+        vLucro, porLucro = 0, 0
+        multLocal = self.opcao.multInicial
+
         if bool(self.frete) and bool(self.preco):
             while True:
                 resp = input("Deseja usar o valor do ultimo frete calculado? [S/N]\n> ").upper()
@@ -235,7 +250,7 @@ class Produto:
                             self.frete = self.frete[1]
 
                 else:
-                    print("Opção invalida.")
+                    print("\nOpção invalida.\n")
                     continue
 
                 break
@@ -245,14 +260,25 @@ class Produto:
             frete = self.calcFrete(twoValues = False)
             self.frete = frete
 
-        vImposto = (self.preco + self.frete) * self.opcao.imposto
-        vTaxaML = (self.preco + self.frete) * self.opcao.taxaML
 
-        precoFinal = self.frete + self.preco + self.opcao.embalagem + vImposto + vTaxaML
+        while vLucro <= self.preco * self.opcao.lucro or porLucro <= self.opcao.lucro * 100:
+            valorFinal = 0
 
-        if self.preco < 120:
-            precoFinal += self.opcao.adicionalML
+            if self.preco < 120:
+                valorFinal += self.opcao.adicionalML
+            valorFinal += self.frete + self.preco + self.opcao.embalagem
+            valorFinal *= multLocal
 
-        precoFinal += precoFinal * self.opcao.lucro
+            vImposto = valorFinal * self.opcao.imposto
+            vTaxaML = valorFinal * self.opcao.taxaML
 
-        return precoFinal
+            vLucro = valorFinal - vImposto - vTaxaML - self.opcao.embalagem - self.frete - self.preco
+
+            if self.preco < 120:
+                vLucro -= self.opcao.adicionalML
+
+            multLocal = float(f"{Decimal(multLocal) + Decimal(0.1):.2f}")
+        
+            porLucro = round(vLucro / valorFinal, 2) * 100
+
+        return valorFinal, porLucro

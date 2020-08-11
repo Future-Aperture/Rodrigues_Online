@@ -36,11 +36,13 @@ Frete: {vF1.replace('.', ',')}""")
         line()
 
     elif opcao == 2:
-        vProduto = produto.calcPreco()
+        vProduto, pLucro = produto.calcPreco()
+        vProduto = f"{round(vProduto, 2):.2f}"
+        pLucro = f"{round(pLucro, 2):.2f}"
 
         line()
 
-        print(f"O valor recomendado para a venda do produto é: R$ {round(vProduto, 2):.2f}")
+        print(f"O valor recomendado para a venda do produto é: R$ {vProduto.replace('.', ',')}\nPorcentagem de lucro: {pLucro}%")
         line()
 
     elif opcao == 9:

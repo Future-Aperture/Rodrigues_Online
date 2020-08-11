@@ -260,25 +260,27 @@ class Produto:
             frete = self.calcFrete(twoValues = False)
             self.frete = frete
 
-
-        while vLucro <= self.preco * self.opcao.lucro or porLucro <= self.opcao.lucro * 100:
-            valorFinal = 0
-
-            if self.preco < 120:
-                valorFinal += self.opcao.adicionalML
-            valorFinal += self.frete + self.preco + self.opcao.embalagem
+        while True:
+            valorFinal = self.frete + self.preco + self.opcao.embalagem
+                
             valorFinal *= multLocal
 
             vImposto = valorFinal * self.opcao.imposto
             vTaxaML = valorFinal * self.opcao.taxaML
 
+            if valorFinal < 120:
+                valorFinal += self.opcao.adicionalML
+
             vLucro = valorFinal - vImposto - vTaxaML - self.opcao.embalagem - self.frete - self.preco
 
-            if self.preco < 120:
+            if valorFinal < 120:
                 vLucro -= self.opcao.adicionalML
 
             multLocal = float(f"{Decimal(multLocal) + Decimal(0.1):.2f}")
         
-            porLucro = round(vLucro / valorFinal, 2) * 100
+            porLucro = round(vLucro / self.preco, 4) * 100
+
+            if vLucro >= self.preco * self.opcao.lucro:
+                break
 
         return valorFinal, porLucro

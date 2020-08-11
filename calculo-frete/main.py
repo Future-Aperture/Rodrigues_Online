@@ -51,6 +51,7 @@ while True:
         if opcao2 == "A":
             options.showAtivo()
             print("WIP")
+            line()
         
         elif opcao2 == "M":
             options.change()

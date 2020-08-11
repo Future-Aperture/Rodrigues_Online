@@ -13,6 +13,7 @@ def header(msg):
 def showMenu():
     print("""[1] Calcular Frete
 [2] Calcular Preço de Venda
+[9] Opções
 [0] Sair""")
 
 
@@ -98,6 +99,69 @@ class Options:
     imposto = 15 / 100
     lucro = 20 / 100
 
+    def show(self):
+        print(f"""- Todos -
+Embalagem
+Imposto
+Lucro
+
+- Mercado Livre -
+Adicional ML [Apenas caso o produto custe menos do que R$ 120,00]
+Taxa ML\n""")
+
+    def showAtivo(self):
+        print(f"""- Todos -
+Embalagem = [X]
+Imposto = [X]
+Lucro = [X]
+
+- Mercado Livre -
+Adicional ML = [X]
+Taxa ML = [X]\n""")
+
+    def showChange(self):
+        emb = f"{self.embalagem:.2f}"
+        aML = f"{self.adicionalML:.2f}"
+
+        print(f"""- Todos -
+[1]Embalagem = R$ {emb.replace(".", ",")}
+[2]Imposto = {str(self.imposto * 100).replace(".", ",")}%
+[3]Lucro = {str(self.lucro * 100).replace(".", ",")}%
+
+- Mercado Livre -
+[4]Adicional ML = {aML.replace(".", ",")}
+[5]Taxa ML = {str(self.taxaML * 100).replace(".", ",")}%\n""")
+
+
+    def change(self):
+        while True:
+            line()
+            self.showChange()
+            escolha = number("Qual opção deseja alterar?\n'0' (zero) para voltar.\n> ")
+
+            if escolha == 0:
+                line()
+                break
+
+            elif escolha == 1:
+                self.embalagem = number("\nCusto da embalagem\n> R$ ")
+            
+            elif escolha == 2:
+                self.imposto = number("\nPorcentagem de imposto\n> ") / 100
+
+            elif escolha == 3:
+                self.lucro = number("\nPorcentagem de lucro\n> ") / 100
+
+            elif escolha == 4:
+                self.adicionalML = number("\nCusto adicional do ML\n> ")
+
+            elif escolha == 5:
+                self.taxaML = number("\nPorcentagem da taxa adicional do ML\n> ") / 100
+
+            else:
+                print("\nOpção Invalida.")
+                continue
+
 
 class Produto:
 
@@ -105,8 +169,7 @@ class Produto:
     preco = 0
 
     def calcFrete(self, twoValues = True):
-        print("""Para calcularmos o valor do frete,\nprimeiro precisamos do peso volumétrico do produto.
-Insira os valores pedidos a baixo.\n""")
+        print("""Para calcularmos o valor do frete, primeiro precisamos do peso volumétrico do produto.\nInsira os valores pedidos a baixo.\n""")
 
         lar = number("Largura [cm]: ")
         alt = number("Altura [cm]: ")
@@ -160,22 +223,23 @@ Insira os valores pedidos a baixo.\n""")
                 elif resp == "S":
                     if len(self.frete) == 2:
                         if self.preco < 120:
-                            frete = self.frete[0]
+                            self.frete = self.frete[0]
+
                         else:
-                            frete = self.frete[1]
-                    else:
-                        frete = self.frete
+                            self.frete = self.frete[1]
+
                 else:
                     print("Opção invalida.")
                     continue
 
                 break
+
         else:
             frete = self.calcFrete(twoValues = False)
             self.frete = frete
 
         vImposto = (self.preco + self.frete) * Options.imposto
-        vTaxaML = self.preco * Options.taxaML
+        vTaxaML = (self.preco + self.frete) * Options.taxaML
 
         precoFinal = self.frete + self.preco + Options.embalagem + vImposto + vTaxaML
 

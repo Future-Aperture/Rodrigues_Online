@@ -1,3 +1,7 @@
+from decimal import Decimal, getcontext
+
+getcontext().prec = 10
+
 def line():
     print()
     print("-=" * 30)
@@ -99,12 +103,14 @@ class Options:
     imposto = 15 / 100
     lucro = 20 / 100
 
+    multInicial = 1.5
 
     def show(self):
         print(f"""- Todos -
+Multiplicador Inicial
 Embalagem
 Imposto
-Lucro
+Lucro Mínimo
 
 - Mercado Livre -
 Adicional ML [Apenas caso o produto custe menos do que R$ 120,00]
@@ -113,9 +119,10 @@ Taxa ML\n""")
 
     def showAtivo(self):
         print(f"""- Todos -
+Multiplicador Inicial [X] [Não pode ser desativado]
 Embalagem = [X]
 Imposto = [X]
-Lucro = [X]
+Lucro Mínimo = [X]
 
 - Mercado Livre -
 Adicional ML = [X]
@@ -128,13 +135,14 @@ Taxa ML = [X]\n""")
         aML = f"{self.adicionalML:.2f}"
 
         print(f"""- Todos -
-[1]Embalagem = R$ {emb.replace(".", ",")}
-[2]Imposto = {str(self.imposto * 100).replace(".", ",")}%
-[3]Lucro = {str(self.lucro * 100).replace(".", ",")}%
+[1]Multiplicador Inicial = {str(self.multInicial).replace(".", ",")}x
+[2]Embalagem = R$ {emb.replace(".", ",")}
+[3]Imposto = {str(self.imposto * 100).replace(".", ",")}%
+[4]Lucro Mínimo = {str(self.lucro * 100).replace(".", ",")}%
 
 - Mercado Livre -
-[4]Adicional ML = {aML.replace(".", ",")}
-[5]Taxa ML = {str(self.taxaML * 100).replace(".", ",")}%\n""")
+[5]Adicional ML = R$ {aML.replace(".", ",")}
+[6]Taxa ML = {str(self.taxaML * 100).replace(".", ",")}%\n""")
 
 
     def change(self):
@@ -148,18 +156,21 @@ Taxa ML = [X]\n""")
                 break
 
             elif escolha == 1:
+                self.multInicial = number("\nValor inicial do multiplicador\n> ")
+
+            elif escolha == 2:
                 self.embalagem = number("\nCusto da embalagem\n> R$ ")
             
-            elif escolha == 2:
-                self.imposto = number("\nPorcentagem do imposto\n> ") / 100
-
             elif escolha == 3:
-                self.lucro = number("\nPorcentagem de lucro\n> ") / 100
+                self.imposto = number("\nPorcentagem de imposto\n> ") / 100
 
             elif escolha == 4:
-                self.adicionalML = number("\nCusto adicional do ML\n> ")
+                self.lucro = number("\nPorcentagem de lucro\n> ") / 100
 
             elif escolha == 5:
+                self.adicionalML = number("\nCusto adicional do ML\n> ")
+
+            elif escolha == 6:
                 self.taxaML = number("\nPorcentagem da taxa adicional do ML\n> ") / 100
 
             else:
@@ -169,11 +180,14 @@ Taxa ML = [X]\n""")
 
 class Produto:
 
+    def __init__(self, op):
+        self.opcao = op
+
     frete = 0
     preco = 0
 
-    def calcFrete(self, twoValues=True):
-        print("""Para calcularmos o valor do frete, precisamos do peso volumétrico do produto.\nInsira os valores pedidos abaixo.\n""")
+    def calcFrete(self, twoValues = True):
+        print("""Para calcularmos o valor do frete, primeiro precisamos do peso volumétrico do produto.\n\nInsira os valores pedidos a baixo.\n""")
 
         lar = number("Largura [cm]: ")
         alt = number("Altura [cm]: ")
@@ -212,23 +226,28 @@ class Produto:
             else:
                 if twoValues:
                     return frete
-                    
+
                 else:
-                    print("\nNão podemos calcular o preço com dois valores de frete. Por favor, insira um preço.")
+                    print("\nNão podemos calcular o preco com dois valores de frete, por favor, insira um preço.")
+
                     preco = number("\nPreço: R$ ")
                     self.preco = preco
+
                     continue
 
     def calcPreco(self):
+        vLucro, porLucro = 0, 0
+        multLocal = self.opcao.multInicial
+
         if bool(self.frete) and bool(self.preco):
             while True:
                 resp = input("Deseja usar o valor do último frete calculado? [S/N]\n> ").upper()
 
                 if resp == "N":
-                    frete = self.calcFrete(twoValues = False)
+                    self.frete = self.calcFrete(twoValues = False)
                 
                 elif resp == "S":
-                    if len(self.frete) == 2:
+                    if type(self.frete) == list:
                         if self.preco < 120:
                             self.frete = self.frete[0]
 
@@ -242,15 +261,31 @@ class Produto:
                 break
 
         else:
+            print("Para conseguir-mos prosseguir, primeiro é necessario calcular o frete do produto.")
             frete = self.calcFrete(twoValues = False)
             self.frete = frete
 
-        vImposto = (self.preco + self.frete) * Options.imposto
-        vTaxaML = (self.preco + self.frete) * Options.taxaML
+        while True:
+            valorFinal = self.frete + self.preco + self.opcao.embalagem
+                
+            valorFinal *= multLocal
 
-        precoFinal = self.frete + self.preco + Options.embalagem + vImposto + vTaxaML
+            vImposto = valorFinal * self.opcao.imposto
+            vTaxaML = valorFinal * self.opcao.taxaML
 
-        if self.preco < 120:
-            precoFinal += 5
+            if valorFinal < 120:
+                valorFinal += self.opcao.adicionalML
 
-        return precoFinal
+            vLucro = valorFinal - vImposto - vTaxaML - self.opcao.embalagem - self.frete - self.preco
+
+            if valorFinal < 120:
+                vLucro -= self.opcao.adicionalML
+
+            multLocal = float(f"{Decimal(multLocal) + Decimal(0.1):.2f}")
+        
+            porLucro = round(vLucro / self.preco, 4) * 100
+
+            if vLucro >= self.preco * self.opcao.lucro:
+                break
+
+        return valorFinal, porLucro

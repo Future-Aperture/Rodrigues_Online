@@ -92,7 +92,7 @@ def number(msg):
             num = float(num.replace(",", "."))
             return num
         except:
-            print(f"\n'{num}' não é um valor válido. Tente novamente.\n")
+            print(f"\n'{num}' não é um valor válido, tente novamente.\n")
 
 
 class Options:
@@ -116,7 +116,6 @@ Lucro Mínimo
 Adicional ML [Apenas caso o produto custe menos do que R$ 99,00]
 Taxa ML\n""")
 
-
     def showAtivo(self):
         print(f"""- Todos -
 Multiplicador Inicial [X] [Não pode ser desativado]
@@ -127,8 +126,6 @@ Lucro Mínimo = [X]
 - Mercado Livre -
 Adicional ML = [X]
 Taxa ML = [X]\n""")
-
-
 
     def showChange(self):
         emb = f"{self.embalagem:.2f}"
@@ -174,7 +171,7 @@ Taxa ML = [X]\n""")
                 self.taxaML = number("\nPorcentagem da taxa adicional do ML\n> ") / 100
 
             else:
-                print("\nOpção Inválida.")
+                print("\nOpção Invalida.")
                 continue
 
 
@@ -186,7 +183,6 @@ class Produto:
     frete = 0
     custo = 0
 
-
     def calcFrete(self):
         print("""Para calcularmos o valor do frete, primeiro precisamos do peso volumétrico do produto.\n\nInsira os valores pedidos a baixo.\n""")
 
@@ -197,7 +193,6 @@ class Produto:
         pesoFis = number("\nPeso Físico [kg]: ")
 
         pesoVol = round(lar * alt * comp / 6000, 2)
-
 
         if pesoVol <= 5:
             peso = pesoFis
@@ -239,18 +234,15 @@ class Produto:
 
                     break
 
-        if bool(self.frete) and bool(self.preco):
-            while True:
-                resp = input("Deseja usar o valor do último frete calculado? [S/N]\n> ").upper()
+            else:
+                print("Para conseguir-mos prosseguir, primeiro é necessario calcular-mos o frete do produto.")
 
                 frete = self.calcFrete()
                 self.frete = frete
 
                 line()
 
-                else:
-                    print("Opção inválida.")
-                    continue
+                continue
 
             break
 

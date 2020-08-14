@@ -198,7 +198,7 @@ class Produto:
         print("\nHá dois possiveis valores de frete dependendo do preço do produto.\n")
 
         if twoValues:
-            print("Caso queira os dois valores, insira '0' (zero) como valor do preço.\n")
+            print("Insira 0(zero) para obter os dois valores.\n")
 
         preco = number("Preço: R$ ")
 
@@ -228,7 +228,7 @@ class Produto:
                     return frete
 
                 else:
-                    print("\nNão podemos calcular o preco com dois valores de frete, por favor, insira um preço.")
+                    print("\nNão podemos calcular o preco com dois valores de frete. Por favor, insira um preço.")
 
                     preco = number("\nPreço: R$ ")
                     self.preco = preco
@@ -261,7 +261,7 @@ class Produto:
                 break
 
         else:
-            print("Para conseguir-mos prosseguir, primeiro é necessario calcular o frete do produto.")
+            print("Para prosseguir, é necessario calcular o frete do produto.")
             frete = self.calcFrete(twoValues = False)
             self.frete = frete
 

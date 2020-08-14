@@ -8,7 +8,7 @@ produto = Produto(options)
 while True:
     showMenu()
     line()
-    opcao = number("Digite sua opção:\n> ")
+    opcao = number("Sua opção:\n> ")
     line()
 
     if opcao == 0:
@@ -44,7 +44,7 @@ while True:
     elif opcao == 9:
         options.show()
 
-        print("[A] Ativar ou Desativar\n[M] Mudar os Valores")
+        print("[A] Ativar/Desativar\n[M] Mudar os Valores")
 
         opcao2 = input("> ").upper()
 
@@ -57,4 +57,4 @@ while True:
             options.change()
 
     else:
-        print("Opção invalida.\n")
+        print("Opção inválida.\n")

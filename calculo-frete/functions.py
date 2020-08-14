@@ -92,7 +92,7 @@ def number(msg):
             num = float(num.replace(",", "."))
             return num
         except:
-            print(f"\n'{num}' não é um valor válido, tente novamente.\n")
+            print(f"\n'{num}' não é um valor válido. Tente novamente.\n")
 
 
 class Options:
@@ -113,33 +113,33 @@ Imposto
 Lucro Mínimo
 
 - Mercado Livre -
-Adicional ML [Apenas caso o produto custe menos do que R$ 99,00]
+Adicional ML (Apenas caso o produto custe menos do que R$ 99,00)
 Taxa ML\n""")
 
     def showAtivo(self):
         print(f"""- Todos -
 Multiplicador Inicial [X] [Não pode ser desativado]
-Embalagem = [X]
-Imposto = [X]
-Lucro Mínimo = [X]
+Embalagem = (X)
+Imposto = (X)
+Lucro Mínimo = (X)
 
 - Mercado Livre -
-Adicional ML = [X]
-Taxa ML = [X]\n""")
+Adicional ML = (X)
+Taxa ML = (X)\n""")
 
     def showChange(self):
         emb = f"{self.embalagem:.2f}"
         aML = f"{self.adicionalML:.2f}"
 
         print(f"""- Todos -
-[1]Multiplicador Inicial = {str(self.multInicial).replace(".", ",")}x
-[2]Embalagem = R$ {emb.replace(".", ",")}
-[3]Imposto = {str(self.imposto * 100).replace(".", ",")}%
-[4]Lucro Mínimo = {str(self.lucro * 100).replace(".", ",")}%
+[1] Multiplicador Inicial = {str(self.multInicial).replace(".", ",")}x
+[2] Embalagem = R$ {emb.replace(".", ",")}
+[3] Imposto = {str(self.imposto * 100).replace(".", ",")}%
+[4] Lucro Mínimo = {str(self.lucro * 100).replace(".", ",")}%
 
 - Mercado Livre -
-[5]Adicional ML = R$ {aML.replace(".", ",")}
-[6]Taxa ML = {str(self.taxaML * 100).replace(".", ",")}%\n""")
+[5] Adicional ML = R$ {aML.replace(".", ",")}
+[6] Taxa ML = {str(self.taxaML * 100).replace(".", ",")}%\n""")
 
 
     def change(self):
@@ -171,7 +171,7 @@ Taxa ML = [X]\n""")
                 self.taxaML = number("\nPorcentagem da taxa adicional do ML\n> ") / 100
 
             else:
-                print("\nOpção Invalida.")
+                print("\nOpção Inválida.")
                 continue
 
 
@@ -184,7 +184,7 @@ class Produto:
     custo = 0
 
     def calcFrete(self):
-        print("""Para calcularmos o valor do frete, primeiro precisamos do peso volumétrico do produto.\n\nInsira os valores pedidos a baixo.\n""")
+        print("""Para calcularmos o frete, precisamos do peso volumétrico do produto.\n\nInsira os valores pedidos abaixo.\n""")
 
         lar = number("Largura [cm]: ")
         alt = number("Altura [cm]: ")
@@ -229,13 +229,13 @@ class Produto:
                         self.frete = frete
 
                     else:
-                        print("\nOpção invalida.\n")
+                        print("\nOpção inválida.\n")
                         continue
 
                     break
 
             else:
-                print("Para conseguir-mos prosseguir, primeiro é necessario calcular-mos o frete do produto.")
+                print("Para prosseguir, é necessario calcular o frete do produto.")
 
                 frete = self.calcFrete()
                 self.frete = frete

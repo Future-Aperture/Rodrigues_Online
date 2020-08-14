@@ -92,18 +92,18 @@ def number(msg):
             num = float(num.replace(",", "."))
             return num
         except:
-            print(f"\n'{num}' não é um valor válido. Tente novamente.\n")
+            print(f"\n'{num}' não é um valor válido, tente novamente.\n")
 
 
 class Options:
     embalagem = 3
     adicionalML = 5
 
-    taxaML = 16 / 100
+    taxaML = 16.5 / 100
     imposto = 15 / 100
     lucro = 20 / 100
 
-    multInicial = 1.5
+    multInicial = 1.1
 
     def show(self):
         print(f"""- Todos -
@@ -113,9 +113,8 @@ Imposto
 Lucro Mínimo
 
 - Mercado Livre -
-Adicional ML [Apenas caso o produto custe menos do que R$ 120,00]
+Adicional ML [Apenas caso o produto custe menos do que R$ 99,00]
 Taxa ML\n""")
-
 
     def showAtivo(self):
         print(f"""- Todos -
@@ -127,8 +126,6 @@ Lucro Mínimo = [X]
 - Mercado Livre -
 Adicional ML = [X]
 Taxa ML = [X]\n""")
-
-
 
     def showChange(self):
         emb = f"{self.embalagem:.2f}"
@@ -174,7 +171,7 @@ Taxa ML = [X]\n""")
                 self.taxaML = number("\nPorcentagem da taxa adicional do ML\n> ") / 100
 
             else:
-                print("\nOpção Inválida.")
+                print("\nOpção Invalida.")
                 continue
 
 
@@ -184,9 +181,9 @@ class Produto:
         self.opcao = op
 
     frete = 0
-    preco = 0
+    custo = 0
 
-    def calcFrete(self, twoValues = True):
+    def calcFrete(self):
         print("""Para calcularmos o valor do frete, primeiro precisamos do peso volumétrico do produto.\n\nInsira os valores pedidos a baixo.\n""")
 
         lar = number("Largura [cm]: ")
@@ -195,15 +192,7 @@ class Produto:
 
         pesoFis = number("\nPeso Físico [kg]: ")
 
-        print("\nHá dois possiveis valores de frete dependendo do preço do produto.\n")
-
-        if twoValues:
-            print("Insira 0(zero) para obter os dois valores.\n")
-
-        preco = number("Preço: R$ ")
-
         pesoVol = round(lar * alt * comp / 6000, 2)
-
 
         if pesoVol <= 5:
             peso = pesoFis
@@ -213,79 +202,74 @@ class Produto:
 
         frete = [baixoPreço(peso), altoPreco(peso)]
 
-        self.lar, self.alt, self.comp, self.pesoFis, self.preco, self.pesoVol, self.frete = lar, alt, comp, pesoFis, preco, pesoVol, frete
+        self.lar, self.alt, self.comp, self.pesoFis, self.pesoVol, self.frete = lar, alt, comp, pesoFis, pesoVol, frete
 
-
-        while True:
-            if preco < 120 and preco != 0:
-                return frete[0]
-
-            elif preco >= 120:
-                return frete[1]
-
-            else:
-                if twoValues:
-                    return frete
-
-                else:
-                    print("\nNão podemos calcular o preco com dois valores de frete. Por favor, insira um preço.")
-
-                    preco = number("\nPreço: R$ ")
-                    self.preco = preco
-
-                    continue
+        return frete
+        
 
     def calcPreco(self):
         vLucro, porLucro = 0, 0
         multLocal = self.opcao.multInicial
 
-        if bool(self.frete) and bool(self.preco):
-            while True:
-                resp = input("Deseja usar o valor do último frete calculado? [S/N]\n> ").upper()
+        while True:
+            if bool(self.frete):
+                while True:
+                    vF0 = f"{self.frete[0]:.2f}"
+                    vF1 = f"{self.frete[1]:.2f}"
+                    resp = number(f"Dos valores de frete calculados, digite qual deles deseja usar.\n[1]R$ {vF0.replace('.', ',')}\n[2]R$ {vF1.replace('.', ',')}\n[3]Calcular um novo frete.\n\n> ")
 
-                if resp == "N":
-                    self.frete = self.calcFrete(twoValues = False)
-                
-                elif resp == "S":
-                    if type(self.frete) == list:
-                        if self.preco < 120:
-                            self.frete = self.frete[0]
+                    if resp == 1:
+                        frete = self.frete[0]
+                    
+                    elif resp == 2:
+                        frete = self.frete[1]
 
-                        else:
-                            self.frete = self.frete[1]
+                    elif resp == 3:
+                        frete = self.calcFrete()
+                        self.frete = frete
 
-                else:
-                    print("Opção inválida.")
-                    continue
+                    else:
+                        print("\nOpção invalida.\n")
+                        continue
 
-                break
+                    break
 
-        else:
-            print("Para prosseguir, é necessario calcular o frete do produto.")
-            frete = self.calcFrete(twoValues = False)
-            self.frete = frete
+            else:
+                print("Para conseguir-mos prosseguir, primeiro é necessario calcular-mos o frete do produto.")
+
+                frete = self.calcFrete()
+                self.frete = frete
+
+                line()
+
+                continue
+
+            break
+
+        custo = number("\nDigite o valor de custo do produto.\n> R$ ")
+        self.custo = custo
 
         while True:
-            valorFinal = self.frete + self.preco + self.opcao.embalagem
+            valorFinal = frete + self.custo + self.opcao.embalagem
                 
             valorFinal *= multLocal
 
             vImposto = valorFinal * self.opcao.imposto
             vTaxaML = valorFinal * self.opcao.taxaML
 
-            if valorFinal < 120:
+            if valorFinal <= 99:
                 valorFinal += self.opcao.adicionalML
 
-            vLucro = valorFinal - vImposto - vTaxaML - self.opcao.embalagem - self.frete - self.preco
+            vLucro = valorFinal - vImposto - vTaxaML - self.opcao.embalagem - frete - self.custo
 
-            if valorFinal < 120:
+            if valorFinal <= 99:
                 vLucro -= self.opcao.adicionalML
 
             multLocal = float(f"{Decimal(multLocal) + Decimal(0.1):.2f}")
         
-            porLucro = round(vLucro / self.preco, 4) * 100
+            porLucro = round(vLucro / self.custo, 4) * 100
 
-            if vLucro >= self.preco * self.opcao.lucro:
+            if vLucro >= self.custo * self.opcao.lucro:
                 break
 
         return valorFinal, porLucro

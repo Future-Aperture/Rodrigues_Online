@@ -196,16 +196,6 @@ class Produto:
 
         pesoFis = number("\nPeso Físico [kg]: ")
 
-<<<<<<< HEAD
-=======
-        print("\nHá dois possiveis valores de frete dependendo do preço do produto.\n")
-
-        if twoValues:
-            print("Caso queira os dois valores, insira '0' (zero) como valor do preço.\n")
-
-        preco = number("Preço: R$ ")
-
->>>>>>> 92d5a4b1de233dccd6c191a0412b7b6fa89f6731
         pesoVol = round(lar * alt * comp / 6000, 2)
 
 

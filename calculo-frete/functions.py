@@ -92,7 +92,7 @@ def number(msg):
             num = float(num.replace(",", "."))
             return num
         except:
-            print(f"\n'{num}' não é um valor válido, tente novamente.\n")
+            print(f"\n'{num}' não é um valor válido. Tente novamente.\n")
 
 
 class Options:
@@ -116,6 +116,7 @@ Lucro Mínimo
 Adicional ML [Apenas caso o produto custe menos do que R$ 99,00]
 Taxa ML\n""")
 
+
     def showAtivo(self):
         print(f"""- Todos -
 Multiplicador Inicial [X] [Não pode ser desativado]
@@ -126,6 +127,8 @@ Lucro Mínimo = [X]
 - Mercado Livre -
 Adicional ML = [X]
 Taxa ML = [X]\n""")
+
+
 
     def showChange(self):
         emb = f"{self.embalagem:.2f}"
@@ -171,7 +174,7 @@ Taxa ML = [X]\n""")
                 self.taxaML = number("\nPorcentagem da taxa adicional do ML\n> ") / 100
 
             else:
-                print("\nOpção Invalida.")
+                print("\nOpção Inválida.")
                 continue
 
 
@@ -192,7 +195,18 @@ class Produto:
 
         pesoFis = number("\nPeso Físico [kg]: ")
 
+<<<<<<< HEAD
+=======
+        print("\nHá dois possiveis valores de frete dependendo do preço do produto.\n")
+
+        if twoValues:
+            print("Caso queira os dois valores, insira '0' (zero) como valor do preço.\n")
+
+        preco = number("Preço: R$ ")
+
+>>>>>>> 92d5a4b1de233dccd6c191a0412b7b6fa89f6731
         pesoVol = round(lar * alt * comp / 6000, 2)
+
 
         if pesoVol <= 5:
             peso = pesoFis
@@ -234,15 +248,18 @@ class Produto:
 
                     break
 
-            else:
-                print("Para conseguir-mos prosseguir, primeiro é necessario calcular-mos o frete do produto.")
+        if bool(self.frete) and bool(self.preco):
+            while True:
+                resp = input("Deseja usar o valor do último frete calculado? [S/N]\n> ").upper()
 
                 frete = self.calcFrete()
                 self.frete = frete
 
                 line()
 
-                continue
+                else:
+                    print("Opção inválida.")
+                    continue
 
             break
 

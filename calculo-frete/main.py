@@ -12,8 +12,7 @@ while True:
     line()
 
     if opcao == 0:
-        print("Programa finalizado. Pressione ENTER para sair.", end = "")
-        input()
+        input("Programa finalizado. Pressione ENTER para sair.", end = "")
         break
 
     elif opcao == 1:
@@ -57,4 +56,6 @@ while True:
             options.change()
 
     else:
-        print("Opção invalida.\n")
+        print("Opção inválida.\n")
+
+

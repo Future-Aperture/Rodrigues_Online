@@ -12,8 +12,7 @@ while True:
     line()
 
     if opcao == 0:
-        print("Programa finalizado. Pressione ENTER para sair.", end = "")
-        input()
+        input("Programa finalizado. Pressione ENTER para sair.", end = "")
         break
 
     elif opcao == 1:
@@ -26,10 +25,10 @@ while True:
         else:
             vF0 = f"{vFrete[0]:.2f}"
             vF1 = f"{vFrete[1]:.2f}"
-            print(f"""Caso o preço do produto seja abaixo de R$ 120.
+            print(f"""Caso o preço do produto seja abaixo de R$120,00:
 Frete: {vF0.replace('.', ',')}
 
-Caso o preço do produto seja acima de R$ 120.
+Caso o preço do produto seja acima de R$120,00:
 Frete: {vF1.replace('.', ',')}""")
        
         line()
@@ -56,6 +55,6 @@ Frete: {vF1.replace('.', ',')}""")
             options.change()
 
     else:
-        print("Opção invalida.\n")
+        print("Opção inválida.\n")
 
 

@@ -41,6 +41,16 @@ while True:
         print(f"O valor recomendado para a venda do produto é: R$ {vProduto.replace('.', ',')}\nPorcentagem de lucro da venda: {pLucro}%")
         line()
 
+    elif opcao == 3:
+        vProduto, pLucro = produto.calcPreco(freteGratis = False)
+        vProduto = f"{round(vProduto, 2):.2f}"
+        pLucro = f"{round(pLucro, 2):.2f}"
+
+        line()
+
+        print(f"O valor recomendado para a venda do produto é: R$ {vProduto.replace('.', ',')}\nPorcentagem de lucro da venda: {pLucro}%")
+        line()
+
     elif opcao == 9:
         options.show()
 

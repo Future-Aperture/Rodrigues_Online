@@ -185,7 +185,7 @@ class Produto:
     custo = 0
 
     def calcFrete(self):
-        print("""Para calcularmos o frete, precisamos do peso volumétrico do produto.\n\nInsira os valores pedidos abaixo.\n""")
+        print("""Para calcularmos o frete, precisamos do peso volumétrico do produto.\n\nInsira os valores pedidos.\n""")
 
         lar = number("Largura [cm]: ")
         alt = number("Altura [cm]: ")
@@ -237,7 +237,7 @@ class Produto:
                         break
 
                 else:
-                    print("Para prosseguir, é necessario calcular o frete do produto.")
+                    print("Para prosseguir é necessario calcular o frete do produto:")
 
                     frete = self.calcFrete()
                     self.frete = frete

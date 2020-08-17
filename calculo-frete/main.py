@@ -12,7 +12,7 @@ while True:
     line()
 
     if opcao == 0:
-        print("Programa finalizado. Pressione ENTER para sair.", end = "")
+        print("Programa finalizado. Pressione ENTER para sair.", end ="")
         input()
         break
 
@@ -42,13 +42,13 @@ while True:
         line()
 
     elif opcao == 3:
-        vProduto, pLucro = produto.calcPreco(freteGratis = False)
+        vProduto, pLucro = produto.calcPreco(freteGratis=False)
         vProduto = f"{round(vProduto, 2):.2f}"
         pLucro = f"{round(pLucro, 2):.2f}"
 
         line()
 
-        print(f"O valor recomendado para a venda do produto é: R$ {vProduto.replace('.', ',')}\nPorcentagem de lucro da venda: {pLucro}%")
+        print(f"O valor mínimo recomendado para a venda do produto é: R$ {vProduto.replace('.', ',')}\nPorcentagem de lucro da venda: {pLucro}%")
         line()
 
     elif opcao == 9:

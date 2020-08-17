@@ -114,12 +114,12 @@ Imposto
 Lucro Mínimo
 
 - Mercado Livre -
-Adicional ML (Apenas caso o produto custe menos do que R$ 99,00)
+Adicional ML (Apenas e o produto custar menos de R$ 99,00)
 Taxa ML\n""")
 
     def showAtivo(self):
         print(f"""- Todos -
-Multiplicador Inicial [X] [Não pode ser desativado]
+Multiplicador Inicial (X) [Não pode ser desativado]
 Embalagem = (X)
 Imposto = (X)
 Lucro Mínimo = (X)
@@ -141,7 +141,6 @@ Taxa ML = (X)\n""")
 - Mercado Livre -
 [5] Adicional ML = R$ {aML.replace(".", ",")}
 [6] Taxa ML = {str(self.taxaML * 100).replace(".", ",")}%\n""")
-
 
     def change(self):
         while True:
@@ -185,7 +184,7 @@ class Produto:
     custo = 0
 
     def calcFrete(self):
-        print("""Para calcularmos o frete, precisamos do peso volumétrico do produto.\n\nInsira os valores pedidos.\n""")
+        print("""Para calcular o frete, precisamos do peso volumétrico do produto.\n\nInsira os valores pedidos:\n""")
 
         lar = number("Largura [cm]: ")
         alt = number("Altura [cm]: ")
@@ -208,11 +207,11 @@ class Produto:
         return frete
         
 
-    def calcPreco(self, freteGratis = True):
+    def calcPreco(self, freteGratis=True):
         multLocal = self.opcao.multInicial
 
         if freteGratis:
-            while True:
+            while True: 
                 if bool(self.frete):
                     while True:
                         vF0 = f"{self.frete[0]:.2f}"

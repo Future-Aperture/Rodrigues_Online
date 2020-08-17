@@ -93,7 +93,7 @@ def number(msg):
             num = float(num.replace(",", "."))
             return num
         except:
-            print(f"\n'{num}' não é um valor válido. Tente novamente.\n")
+            print(f"\n'{num}' não é um valor reconhecido. Tente novamente.\n")
 
 
 class Options:
@@ -217,7 +217,7 @@ class Produto:
                     while True:
                         vF0 = f"{self.frete[0]:.2f}"
                         vF1 = f"{self.frete[1]:.2f}"
-                        resp = number(f"Dos valores de frete calculados, digite qual deles deseja usar.\n[1]R$ {vF0.replace('.', ',')}\n[2]R$ {vF1.replace('.', ',')}\n[3]Calcular um novo frete.\n\n> ")
+                        resp = number(f"Dos valores de frete calculados, digite qual deles deseja usar.\n[1] R$ {vF0.replace('.', ',')}\n[2] R$ {vF1.replace('.', ',')}\n[3] Calcular um novo frete.\n\n> ")
                         print()
 
                         if resp == 1:

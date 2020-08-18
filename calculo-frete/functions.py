@@ -1,4 +1,5 @@
 from decimal import Decimal, getcontext
+import os
 
 getcontext().prec = 10
 
@@ -15,9 +16,11 @@ def header(msg):
 
 
 def showMenu():
+    header("MENU PRINCIPAL")
     print("""[1] Calcular Frete
 [2] Calcular Preço de Venda [Com Frete Grátis]
 [3] Calcular Preço de Venda [Sem Frete Grátis]
+
 [9] Opções
 [0] Sair""")
 
@@ -104,9 +107,10 @@ class Options:
     imposto = 15 / 100
     lucro = 20 / 100
 
-    multInicial = 1.1
+    multInicial = 1.01
 
     def show(self):
+        header("OPÇÕES")
         print(f"""- Todos -
 Multiplicador Inicial
 Embalagem
@@ -118,6 +122,9 @@ Adicional ML (Apenas caso o produto custe menos do que R$ 99,00)
 Taxa ML\n""")
 
     def showAtivo(self):
+        os.system('cls')
+        header("OPÇÕES")
+
         print(f"""- Todos -
 Multiplicador Inicial [X] [Não pode ser desativado]
 Embalagem = (X)
@@ -126,9 +133,16 @@ Lucro Mínimo = (X)
 
 - Mercado Livre -
 Adicional ML = (X)
-Taxa ML = (X)\n""")
+Taxa ML = (X)""")
+        print("WIP")
+        line()
+
+        input("Pressione ENTER para continuar.")
+        os.system('cls')
 
     def showChange(self):
+        os.system('cls')
+        header("OPÇÕES")
         emb = f"{self.embalagem:.2f}"
         aML = f"{self.adicionalML:.2f}"
 
@@ -151,6 +165,7 @@ Taxa ML = (X)\n""")
 
             if escolha == 0:
                 line()
+                os.system('cls')
                 break
 
             elif escolha == 1:
@@ -215,6 +230,8 @@ class Produto:
             while True:
                 if bool(self.frete):
                     while True:
+                        os.system("cls")
+                        header("PREÇO COM FRETE")
                         vF0 = f"{self.frete[0]:.2f}"
                         vF1 = f"{self.frete[1]:.2f}"
                         resp = number(f"Dos valores de frete calculados, digite qual deles deseja usar.\n[1]R$ {vF0.replace('.', ',')}\n[2]R$ {vF1.replace('.', ',')}\n[3]Calcular um novo frete.\n\n> ")
@@ -227,8 +244,10 @@ class Produto:
                             frete = self.frete[1]
 
                         elif resp == 3:
-                            frete = self.calcFrete()
-                            self.frete = frete
+                            os.system("cls")
+                            header("PREÇO COM FRETE")
+                            self.frete = self.calcFrete()
+                            continue
 
                         else:
                             print("\nOpção inválida.\n")
@@ -254,25 +273,37 @@ class Produto:
         while True:
             vLucro = 0
             valorFinal = self.custo + self.opcao.embalagem
-                
+
             if freteGratis:
                 valorFinal += frete
                 vLucro -= frete
+
+            valorFinal *= multLocal
                 
             if valorFinal <= 99:
                 valorFinal += self.opcao.adicionalML
                 vLucro -= self.opcao.adicionalML
 
-            valorFinal *= multLocal
-
-            vImposto = valorFinal * self.opcao.imposto
-            vTaxaML = valorFinal * self.opcao.taxaML
+            vImposto = round(valorFinal * self.opcao.imposto, 2)
+            vTaxaML = round(valorFinal * self.opcao.taxaML, 2)
 
             vLucro += valorFinal - vImposto - vTaxaML - self.opcao.embalagem - self.custo
+            vLucro = round(vLucro, 2)
 
-            multLocal = float(f"{Decimal(multLocal) + Decimal(0.1):.2f}")
+            multLocal = float(f"{Decimal(multLocal) + Decimal(0.01):.2f}")
 
             if vLucro >= self.custo * self.opcao.lucro:   
                 porLucro = round(vLucro / self.custo, 4) * 100      
 
-                return valorFinal, porLucro
+                lNomes = ["Custo", "Lucro", "Imposto", "Taxa ML", "Embalagem"]
+                lValores = [self.custo, vLucro, vImposto, vTaxaML, self.opcao.embalagem]
+
+                if valorFinal <= 99:
+                    lNomes.append("Adicional ML")
+                    lValores.append(self.opcao.adicionalML)
+                
+                if freteGratis:
+                    lNomes.insert(2, "Frete")
+                    lValores.insert(2, frete)
+                
+                return valorFinal, porLucro, dict(zip(lNomes, lValores))

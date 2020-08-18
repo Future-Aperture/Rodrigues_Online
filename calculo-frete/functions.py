@@ -134,14 +134,13 @@ Lucro Mínimo = (X)
 - Mercado Livre -
 Adicional ML = (X)
 Taxa ML = (X)""")
-        print("WIP")
+        print("\nWIP")
         line()
 
         input("Pressione ENTER para continuar.")
         os.system('cls')
 
     def showChange(self):
-        os.system('cls')
         header("OPÇÕES")
         emb = f"{self.embalagem:.2f}"
         aML = f"{self.adicionalML:.2f}"
@@ -158,13 +157,15 @@ Taxa ML = (X)""")
 
 
     def change(self):
+        os.system('cls')
+
+        self.showChange()
+        print("Qual opção deseja alterar?\n'0' (zero) para voltar.\n")
+
         while True:
-            line()
-            self.showChange()
-            escolha = number("Qual opção deseja alterar?\n'0' (zero) para voltar.\n> ")
+            escolha = number("> ")
 
             if escolha == 0:
-                line()
                 os.system('cls')
                 break
 
@@ -187,7 +188,7 @@ Taxa ML = (X)""")
                 self.taxaML = number("\nPorcentagem da taxa adicional do ML\n> ") / 100
 
             else:
-                print("\nOpção Inválida.")
+                print("\nOpção Inválida.\n")
                 continue
 
 

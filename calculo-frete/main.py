@@ -1,14 +1,14 @@
 from functions import showMenu, line, Produto, header, number, Options
 import os
 
-os.system('cls')
-
-header("AFTON")
-
 options = Options()
 produto = Produto(options)
 
 while True:
+    os.system('cls')
+
+    header("AFTON")
+
     showMenu()
     line()
     opcao = number("Sua opção:\n> ")
@@ -85,18 +85,30 @@ while True:
 
     elif opcao == 9:
         os.system('cls')
-        options.show()
 
-        print("[A] Ativar/Desativar\n[M] Mudar os Valores")
+        while True:
+            options.show()
+            print("[A] Ativar/Desativar\n[M] Mudar os Valores\n[0] Voltar")
 
-        opcao2 = input("> ").upper()
+            while True:
+                opcao2 = input("> ").upper()
 
-        if opcao2 == "A":
-            options.showAtivo()
-            line()
-        
-        elif opcao2 == "M":
-            options.change()
+                if opcao2 == "A":
+                    options.showAtivo()
+                    line()
+                
+                elif opcao2 == "M":
+                    options.change()
+                    break
+
+                elif opcao2 == "0":
+                    break
+
+                else:
+                    print("\nOpção inválida.\n")
+                
+            if opcao2 == "0":
+                    break
 
     else:
         print("Opção inválida.\n")

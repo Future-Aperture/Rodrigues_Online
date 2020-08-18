@@ -157,12 +157,12 @@ Taxa ML = (X)""")
 
 
     def change(self):
-        os.system('cls')
-
-        self.showChange()
-        print("Qual opção deseja alterar?\n'0' (zero) para voltar.\n")
-
         while True:
+            os.system('cls')
+
+            self.showChange()
+            print("Qual opção deseja alterar?\n'0' (zero) para voltar.\n")
+
             escolha = number("> ")
 
             if escolha == 0:
@@ -190,7 +190,6 @@ Taxa ML = (X)""")
             else:
                 print("\nOpção Inválida.\n")
                 continue
-
 
 class Produto:
 
@@ -233,9 +232,14 @@ class Produto:
                     while True:
                         os.system("cls")
                         header("PREÇO COM FRETE")
+
                         vF0 = f"{self.frete[0]:.2f}"
                         vF1 = f"{self.frete[1]:.2f}"
-                        resp = number(f"Dos valores de frete calculados, digite qual deles deseja usar.\n[1]R$ {vF0.replace('.', ',')}\n[2]R$ {vF1.replace('.', ',')}\n[3]Calcular um novo frete.\n\n> ")
+
+                        print(f"""Caso o preço de venda seja abaixo de R$ 99,00.\nFrete: R$ {vF0.replace('.', ',')}\n\nCaso o preço de venda seja acima de R$ 99,00.\nFrete: R$ {vF1.replace('.', ',')}""")
+                        line()
+
+                        resp = number(f"Dos valores de frete calculados, digite qual deles deseja usar.\n\n[1]R$ {vF0.replace('.', ',')}\n[2]R$ {vF1.replace('.', ',')}\n[3]Calcular um novo frete.\n\n> ")
                         print()
 
                         if resp == 1:

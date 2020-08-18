@@ -3,16 +3,21 @@ import os
 
 options = Options()
 produto = Produto(options)
+opcao = None
+
+os.system('cls')
+header("AFTON")
+showMenu()
+line()
 
 while True:
-    os.system('cls')
+    if opcao in [0, 1, 2, 3, 9]:
+        os.system('cls')
+        header("AFTON")
+        showMenu()
+        line()
 
-    header("AFTON")
-
-    showMenu()
-    line()
     opcao = number("Sua opção:\n> ")
-    line()
 
     if opcao == 0:
         os.system('cls')
@@ -95,7 +100,7 @@ while True:
 
                 if opcao2 == "A":
                     options.showAtivo()
-                    line()
+                    break
                 
                 elif opcao2 == "M":
                     options.change()
@@ -111,4 +116,8 @@ while True:
                     break
 
     else:
-        print("Opção inválida.\n")
+        print("\nOpção inválida.\n")
+        opcao = None
+        continue
+
+    os.system('cls')

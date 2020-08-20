@@ -77,7 +77,7 @@ while True:
 
         os.system('cls')
         header("PREÇO COM FRETE")
-        print(f"O valor recomendado para a venda do produto é: R$ {vProduto.replace('.', ',')}\nPorcentagem de lucro da venda: {pLucro}%")
+        print(f"O valor mínimo recomendado para a venda do produto é: R$ {vProduto.replace('.', ',')}\nPorcentagem de lucro da venda: {pLucro}%")
         line()
 
         for k, v in dictValores.items():

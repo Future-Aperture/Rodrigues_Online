@@ -4,7 +4,7 @@ import os
 
 # <---------------| Variáveis Globais |--------------->
 options = Options()
-produto = Produto()
+produto = Produto(options)
 opcao = 0
 
 

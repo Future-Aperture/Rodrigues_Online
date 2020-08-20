@@ -168,9 +168,13 @@ Taxa ML = (X)""")
                 print("\nOpção Inválida.\n")
                 continue
 
-class Produto(Options):
+class Produto:
     frete = 0
     custo = 0
+
+    def __init__(self, opcoes):
+        self.opcoes = opcoes
+            
 
     def calcFrete(self):
         print("""Para calcular o frete, precisamos do peso volumétrico do produto.\n\nInsira os valores pedidos:\n""")
@@ -197,7 +201,7 @@ class Produto(Options):
         
 
     def calcPreco(self, freteGratis = True):
-        multLocal = self.multInicial
+        multLocal = self.opcoes.multInicial
 
         if freteGratis:
             while True: 
@@ -247,7 +251,7 @@ class Produto(Options):
 
         while True:
             vLucro = 0
-            valorFinal = self.custo + self.embalagem
+            valorFinal = self.custo + self.opcoes.embalagem
 
             if freteGratis:
                 valorFinal += frete
@@ -256,26 +260,26 @@ class Produto(Options):
             valorFinal *= multLocal
                 
             if valorFinal <= 99:
-                valorFinal += self.adicionalML
-                vLucro -= self.adicionalML
+                valorFinal += self.opcoes.adicionalML
+                vLucro -= self.opcoes.adicionalML
 
-            vImposto = round(valorFinal * self.imposto, 2)
-            vTaxaML = round(valorFinal * self.taxaML, 2)
+            vImposto = round(valorFinal * self.opcoes.imposto, 2)
+            vTaxaML = round(valorFinal * self.opcoes.taxaML, 2)
 
-            vLucro += valorFinal - vImposto - vTaxaML - self.embalagem - self.custo
+            vLucro += valorFinal - vImposto - vTaxaML - self.opcoes.embalagem - self.custo
             vLucro = round(vLucro, 2)
 
             multLocal = float(f"{Decimal(multLocal) + Decimal(0.01):.2f}")
 
-            if vLucro >= self.custo * self.lucro:   
+            if vLucro >= self.custo * self.opcoes.lucro:   
                 porLucro = round(vLucro / self.custo, 4) * 100      
 
                 lNomes = ["Custo", "Lucro", "Imposto", "Taxa ML", "Embalagem"]
-                lValores = [self.custo, vLucro, vImposto, vTaxaML, self.embalagem]
+                lValores = [self.custo, vLucro, vImposto, vTaxaML, self.opcoes.embalagem]
 
                 if valorFinal <= 99:
                     lNomes.append("Adicional ML")
-                    lValores.append(self.adicionalML)
+                    lValores.append(self.opcoes.adicionalML)
                 
                 if freteGratis:
                     lNomes.insert(2, "Frete")

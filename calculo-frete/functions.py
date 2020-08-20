@@ -96,7 +96,7 @@ def number(msg):
             num = float(num.replace(",", "."))
             return num
         except:
-            print(f"\n'{num}' não é um valor válido. Tente novamente.\n")
+            print(f"\n'{num}' não é um valor reconhecido. Tente novamente.\n")
 
 
 class Options:
@@ -118,7 +118,7 @@ Imposto
 Lucro Mínimo
 
 - Mercado Livre -
-Adicional ML (Apenas caso o produto custe menos do que R$ 99,00)
+Adicional ML (Apenas e o produto custar menos de R$ 99,00)
 Taxa ML\n""")
 
     def showAtivo(self):
@@ -126,7 +126,7 @@ Taxa ML\n""")
         header("OPÇÕES")
 
         print(f"""- Todos -
-Multiplicador Inicial [X] [Não pode ser desativado]
+Multiplicador Inicial (X) [Não pode ser desativado]
 Embalagem = (X)
 Imposto = (X)
 Lucro Mínimo = (X)
@@ -154,7 +154,6 @@ Taxa ML = (X)""")
 - Mercado Livre -
 [5] Adicional ML = R$ {aML.replace(".", ",")}
 [6] Taxa ML = {str(self.taxaML * 100).replace(".", ",")}%\n""")
-
 
     def change(self):
         while True:
@@ -200,7 +199,7 @@ class Produto:
     custo = 0
 
     def calcFrete(self):
-        print("""Para calcularmos o frete, precisamos do peso volumétrico do produto.\n\nInsira os valores pedidos abaixo.\n""")
+        print("""Para calcular o frete, precisamos do peso volumétrico do produto.\n\nInsira os valores pedidos:\n""")
 
         lar = number("Largura [cm]: ")
         alt = number("Altura [cm]: ")
@@ -223,11 +222,11 @@ class Produto:
         return frete
         
 
-    def calcPreco(self, freteGratis = True):
+    def calcPreco(self, freteGratis=True):
         multLocal = self.opcao.multInicial
 
         if freteGratis:
-            while True:
+            while True: 
                 if bool(self.frete):
                     while True:
                         os.system("cls")
@@ -239,7 +238,7 @@ class Produto:
                         print(f"""Caso o preço de venda seja abaixo de R$ 99,00.\nFrete: R$ {vF0.replace('.', ',')}\n\nCaso o preço de venda seja acima de R$ 99,00.\nFrete: R$ {vF1.replace('.', ',')}""")
                         line()
 
-                        resp = number(f"Dos valores de frete calculados, digite qual deles deseja usar.\n\n[1]R$ {vF0.replace('.', ',')}\n[2]R$ {vF1.replace('.', ',')}\n[3]Calcular um novo frete.\n\n> ")
+                        resp = number(f"Dos valores de frete calculados, digite qual deles deseja usar.\n\n[1] R$ {vF0.replace('.', ',')}\n[2] R$ {vF1.replace('.', ',')}\n[3] Calcular um novo frete.\n\n> ")
                         print()
 
                         if resp == 1:
@@ -261,7 +260,7 @@ class Produto:
                         break
 
                 else:
-                    print("Para prosseguir, é necessario calcular o frete do produto.")
+                    print("Para prosseguir é necessario calcular o frete do produto:")
 
                     frete = self.calcFrete()
                     self.frete = frete

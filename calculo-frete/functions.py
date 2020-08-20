@@ -1,20 +1,30 @@
+# <---------------| Modulos |--------------->
 from decimal import Decimal, getcontext
 import os
 
+
+# <---------------| Variáveis Globais |--------------->
 getcontext().prec = 10
 
-def line():
+
+# <---------------| Linha |--------------->
+def linha():
     print()
     print("-=" * 30)
     print()
 
 
+# <---------------| Header |--------------->
 def header(msg):
-    line()
+    linha()
     print(f"{msg:^60}")
-    line()
+    linha()
 
+# <---------------| Clean |--------------->
+def clean(num):
+    return f"{round(num, 2):.2f}".replace('.', ',')
 
+# <---------------| Menu |--------------->
 def showMenu():
     header("MENU PRINCIPAL")
     print("""[1] Calcular Frete
@@ -25,71 +35,41 @@ def showMenu():
 [0] Sair""")
 
 
-def baixoPreço(p):
+# <---------------| Frete |--------------->
+def fretePreco(p):
     if p < 0.5:
-        return 47.90
+        return [47.90, 35.93]
 
     elif 0.5 <= p < 1:
-        return 52.90
+        return [52.90, 39.68]
 
     elif 1 <= p < 2:
-        return 61.90
+        return [61.90, 46.43]
 
     elif 2 <= p < 5:
-        return 75.90
+        return [75.90, 56.93]
 
     elif 5 <= p < 9:
-        return 97.90
+        return [97.90, 73.43]
 
     elif 9 <= p < 13:
-        return 140.90 
+        return [140.90, 105.68]
 
     elif 13 <= p < 17:
-        return 187.90
+        return [187.90, 140.93]
 
     elif 17 <= p < 23:
-        return 209.90
+        return [209.90, 157.43]
 
     elif 23 <= p < 29:
-        return 219.90
+        return [219.90, 164.93]
 
     else:
-        return 229.90
+        return [229.90, 172.43]
 
 
-def altoPreco(p):
-    if p < 0.5:
-        return 35.93
-
-    elif 0.5 <= p < 1:
-        return 39.68
-
-    elif 1 <= p < 2:
-        return 46.43
-
-    elif 2 <= p < 5:
-        return 56.93
-
-    elif 5 <= p < 9:
-        return 73.43
-
-    elif 9 <= p < 13:
-        return 105.68 
-
-    elif 13 <= p < 17:
-        return 140.93
-
-    elif 17 <= p < 23:
-        return 157.43
-
-    elif 23 <= p < 29:
-        return 164.93
-
-    else:
-        return 172.43
-
-
-def number(msg):
+# <---------------| Número |--------------->
+def number(msg = "> "):
     while True:
         num = input(msg)
         try:
@@ -135,25 +115,23 @@ Lucro Mínimo = (X)
 Adicional ML = (X)
 Taxa ML = (X)""")
         print("\nWIP")
-        line()
+        linha()
 
         input("Pressione ENTER para continuar.")
         os.system('cls')
 
     def showChange(self):
         header("OPÇÕES")
-        emb = f"{self.embalagem:.2f}"
-        aML = f"{self.adicionalML:.2f}"
 
         print(f"""- Todos -
-[1] Multiplicador Inicial = {str(self.multInicial).replace(".", ",")}x
-[2] Embalagem = R$ {emb.replace(".", ",")}
-[3] Imposto = {str(self.imposto * 100).replace(".", ",")}%
-[4] Lucro Mínimo = {str(self.lucro * 100).replace(".", ",")}%
+[1] Multiplicador Inicial = {clean(self.multInicial)}x
+[2] Embalagem = R$ {clean(self.embalagem)}
+[3] Imposto = {clean(self.imposto * 100)}%
+[4] Lucro Mínimo = {clean(self.lucro * 100)}%
 
 - Mercado Livre -
-[5] Adicional ML = R$ {aML.replace(".", ",")}
-[6] Taxa ML = {str(self.taxaML * 100).replace(".", ",")}%\n""")
+[5] Adicional ML = R$ {clean(self.adicionalML)}
+[6] Taxa ML = {clean(self.taxaML * 100)}%\n""")
 
     def change(self):
         while True:
@@ -190,11 +168,7 @@ Taxa ML = (X)""")
                 print("\nOpção Inválida.\n")
                 continue
 
-class Produto:
-
-    def __init__(self, op):
-        self.opcao = op
-
+class Produto(Options):
     frete = 0
     custo = 0
 
@@ -215,15 +189,15 @@ class Produto:
         else:
             peso = max([pesoVol, pesoFis])
 
-        frete = [baixoPreço(peso), altoPreco(peso)]
+        frete = fretePreco(peso)
 
         self.lar, self.alt, self.comp, self.pesoFis, self.pesoVol, self.frete = lar, alt, comp, pesoFis, pesoVol, frete
 
         return frete
         
 
-    def calcPreco(self, freteGratis=True):
-        multLocal = self.opcao.multInicial
+    def calcPreco(self, freteGratis = True):
+        multLocal = self.multInicial
 
         if freteGratis:
             while True: 
@@ -232,13 +206,10 @@ class Produto:
                         os.system("cls")
                         header("PREÇO COM FRETE")
 
-                        vF0 = f"{self.frete[0]:.2f}"
-                        vF1 = f"{self.frete[1]:.2f}"
+                        print(f"""Caso o preço de venda seja abaixo de R$ 99,00.\nFrete: R$ {clean(self.frete[0])}\n\nCaso o preço de venda seja acima de R$ 99,00.\nFrete: R$ {clean(self.frete[1])}""")
+                        linha()
 
-                        print(f"""Caso o preço de venda seja abaixo de R$ 99,00.\nFrete: R$ {vF0.replace('.', ',')}\n\nCaso o preço de venda seja acima de R$ 99,00.\nFrete: R$ {vF1.replace('.', ',')}""")
-                        line()
-
-                        resp = number(f"Dos valores de frete calculados, digite qual deles deseja usar.\n\n[1] R$ {vF0.replace('.', ',')}\n[2] R$ {vF1.replace('.', ',')}\n[3] Calcular um novo frete.\n\n> ")
+                        resp = number(f"Dos valores de frete calculados, digite qual deles deseja usar.\n\n[1] R$ {clean(self.frete[0])}\n[2] R$ {clean(self.frete[1])}\n[3] Calcular um novo frete.\n\n> ")
                         print()
 
                         if resp == 1:
@@ -265,7 +236,7 @@ class Produto:
                     frete = self.calcFrete()
                     self.frete = frete
 
-                    line()
+                    linha()
 
                     continue
 
@@ -276,7 +247,7 @@ class Produto:
 
         while True:
             vLucro = 0
-            valorFinal = self.custo + self.opcao.embalagem
+            valorFinal = self.custo + self.embalagem
 
             if freteGratis:
                 valorFinal += frete
@@ -285,26 +256,26 @@ class Produto:
             valorFinal *= multLocal
                 
             if valorFinal <= 99:
-                valorFinal += self.opcao.adicionalML
-                vLucro -= self.opcao.adicionalML
+                valorFinal += self.adicionalML
+                vLucro -= self.adicionalML
 
-            vImposto = round(valorFinal * self.opcao.imposto, 2)
-            vTaxaML = round(valorFinal * self.opcao.taxaML, 2)
+            vImposto = round(valorFinal * self.imposto, 2)
+            vTaxaML = round(valorFinal * self.taxaML, 2)
 
-            vLucro += valorFinal - vImposto - vTaxaML - self.opcao.embalagem - self.custo
+            vLucro += valorFinal - vImposto - vTaxaML - self.embalagem - self.custo
             vLucro = round(vLucro, 2)
 
             multLocal = float(f"{Decimal(multLocal) + Decimal(0.01):.2f}")
 
-            if vLucro >= self.custo * self.opcao.lucro:   
+            if vLucro >= self.custo * self.lucro:   
                 porLucro = round(vLucro / self.custo, 4) * 100      
 
                 lNomes = ["Custo", "Lucro", "Imposto", "Taxa ML", "Embalagem"]
-                lValores = [self.custo, vLucro, vImposto, vTaxaML, self.opcao.embalagem]
+                lValores = [self.custo, vLucro, vImposto, vTaxaML, self.embalagem]
 
                 if valorFinal <= 99:
                     lNomes.append("Adicional ML")
-                    lValores.append(self.opcao.adicionalML)
+                    lValores.append(self.adicionalML)
                 
                 if freteGratis:
                     lNomes.insert(2, "Frete")

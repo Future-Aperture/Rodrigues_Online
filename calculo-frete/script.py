@@ -3,19 +3,13 @@ import sys
 
 base = None
 
-if sys.platform == 'win32':
-    base = None
-
-
 executables = [Executable("main.py", base=base)]
 
 packages = ["functions"]
 options = {
     'build_exe': {
-
-        'packages':packages,
-    },
-
+        'packages':packages
+    }
 }
 
 setup(

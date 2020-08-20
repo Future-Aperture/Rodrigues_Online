@@ -118,7 +118,7 @@ Imposto
 Lucro Mínimo
 
 - Mercado Livre -
-Adicional ML (Apenas e o produto custar menos de R$ 99,00)
+Adicional ML (Aplicado caso o preço de venda for menos que R$ 99,00)
 Taxa ML\n""")
 
     def showAtivo(self):
@@ -222,11 +222,11 @@ class Produto:
         return frete
         
 
-    def calcPreco(self, freteGratis=True):
+    def calcPreco(self, freteGratis = True):
         multLocal = self.opcao.multInicial
 
         if freteGratis:
-            while True: 
+            while True:
                 if bool(self.frete):
                     while True:
                         os.system("cls")
